@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <!-- Add any additional styles or links to external stylesheets here -->
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: lightgray;
+            margin: 0;
+            padding: 0;
+        }
+
+        #banner {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: right;
+        }
+
+        #content {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        #alert-preferences {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        img {
+            width: 150px;
+            height: 150px;
+            border-radius: 60%;
+        }
+        
+        #edit-profile-btn{
+            margin-top: 50px;
+        }
+
+        .feedback-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .feedback-button:hover {
+        background-color: #45a049;
+    }
+
+    #feedback-chat-panel {
+        display: none;
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 3;
+        transform: scale(0);
+        transition: transform 0.3s;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    #chat-messages {
+        max-height: 100px;
+        overflow-y: auto;
+    }
+
+    #admin-feedback-message {
+        width: calc(100% - 20px);
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+    }
+       
+    </style>
+</head>
+<body>
+    <div id="banner">
+        
+        <div id="feedback-chat-panel" class="message-form">
+            <h3>Send Feedback </h3>
+            <div id="chat-messages" class="chat-messages"></div>
+            <!-- <% if (flag === 'true') { %> -->
+
+            
+
+
+
+
+
+
+                    
+            <!-- <ul>
+                <% feedback_result.forEach((each) => { %>
+                    <li id="name"> <%= each.post_message %> </li>
+                    
+                <% }); %>
+
+            </ul>  -->
+            <!-- <% } else  { %>
+
+            <% } %>    -->
+        </div>
+
+    
+        <div id="feedback-popup" class="message-popup"></div>
+    </div>
+    <% feedback_result.forEach((each) => { %>
+        <li id="name"> <%= each.post_message %> </li>
+    <% }); %>
+</body>
+    <script>
+        
+    function toggleFeedbackChatPanel() {
+        var feedbackChatPanel = document.getElementById('feedback-chat-panel');
+        if (feedbackChatPanel.style.display === 'none') {
+            feedbackChatPanel.style.display = 'block';
+            feedbackChatPanel.style.transform = 'scale(1)';
+        } else {
+            feedbackChatPanel.style.transform = 'scale(0)';
+            setTimeout(function () {
+                feedbackChatPanel.style.display = 'none';
+            }, 300);
+        }
+    }
+    
+
+    function showFeedbackPopup() {
+        var feedbackPopup = document.getElementById('feedback-popup');
+        feedbackPopup.innerHTML = 'Feedback submitted!';
+        feedbackPopup.classList.add('show');
+        setTimeout(function () {
+            feedbackPopup.classList.remove('show');
+        }, 3000);
+    }
+    function updateChatPanel() {
+        var chatMessages = document.getElementById('chat-messages');
+        var feedbackMessage = document.getElementById('admin-feedback-message').value;
+        chatMessages.innerHTML = feedbackMessage;
+    }
+    </script>
+
+</body>
+</html>

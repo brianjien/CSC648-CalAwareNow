@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <title>Google Map</title>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #search-input {
+            width: 60%;
+            padding: 10px;
+        }
+        #map {
+            height: 96%;
+        }
+        #banner {
+             background-color: #C3CBDC;
+background-image: linear-gradient(147deg, #C3CBDC 0%, #EDF1F4 74%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+#search-container {
+    text-align: center;
+    flex-grow: 1;
+}
+#dashboard-container {
+    display: flex;
+    align-items: center;
+}
+#dashboard-button,
+#alert-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 80px;
+}
+#dashboard-button:hover,
+#alert-button:hover {
+    background-color: transparent;
+}
+#dashboard-button {
+    margin-right: 10px;
+    padding: 10px 20px;
+}
+        #search-button:hover,
+        #dashboard-button:hover,
+        #alert-button:hover {
+            background-color: transparent;
+        }
+        #search-button {
+            margin-right: 20px;
+            padding: 50px 20px; /* Adjust padding to match the search bar height */
+    font-size: 1.2em; /* Increase font size for better visibility */
+    width: auto;
+        }
+        #logo {
+    height: 110px; /* Logo height, can be adjusted */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 20px; /* Space between logo and next element */
+}
+        #dashboard-container {
+            position: relative;
+            right: 2cm;
+            display: flex;
+            align-items: center;
+        }
+        #dashboard-button {
+            margin-right: 20px;
+        }
+        #alert-button {
+            margin-right: 20px;
+            background: url('icon/notify_icon.png') no-repeat center center;
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+        }
+        #user-profile-button {
+            position: absolute;
+            top: 20px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        /* Style for the user profile dropdown menu */
+        #user-profile-dropdown {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        #user-profile-dropdown a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .animated-panel {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            display: none;
+            transform-origin: top right;
+            transform: scaleY(0);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .panel-content {
+            background-color: transparent;
+        }
+        /* .county-dropdown {
+            display: none;
+        } */
+        .county-checkboxes {
+            margin-top: 10px;
+        }
+        .county-checkboxes label {
+            display: block;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            /* Adjust as needed */
+            width: 100%;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px;
+        }
+        .comment {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        strong {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+            text-align: left;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #alert-panel .demo-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        #alert-panel .high-level {
+            background-color: #FF4D4D;
+            /* Red color for high-level disaster */
+            color: rgb(0, 0, 0);
+        }
+        #alert-panel .medium-level {
+            background-color: #FFA500;
+            /* Orange color for medium-level disaster */
+            color: rgb(0, 0, 0);
+        }
+        #alert-panel .low-level {
+            background-color: #66CC66;
+            /* Green color for low-level disaster */
+            color: rgb(0, 0, 0);
+        }
+        #alert-panel h3 {
+            color: black;
+            text-align: center;
+        }
+    .feedback-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .feedback-button:hover {
+        background-color: #45A049;
+    }
+    #feedback-chat-panel {
+        display: none;
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 3;
+        transform: scale(0);
+        transition: transform 0.3s;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    #chat-messages {
+        max-height: 100px;
+        overflow-y: auto;
+    }
+    #admin-feedback-message {
+        width: calc(100% - 20px);
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+    }
+        footer {
+            font-size: large;
+            text-align: center;
+            padding: 20px;
+            background-color: #C3CBDC;
+            color: rgb(13, 13, 13);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="banner">
+        <img id="logo" src="/icon/logo.png" alt="Logo">
+        <div id="search-container">
+            <form id="search-form" action="/search/search_result" method="post">
+                <input type="text" id="search-input" name="search"
+                    placeholder="Search one of the options such as Covid, Security, Weather or Wildfire">
+                <!-- <button type="button" id="search-button" onclick="toggleCountyDropdown(event)">Filter by Counties</button> -->
+
+                <input id="submit-button" class="submit" type="submit" value="Search">
+            </form>
+
+            <form id="search-form" action="/search/filter_result" method="post">
+                <div id="county-dropdown" class="county-dropdown">
+                    <select name="emergency" id="emergency" required>
+                        <option value="covid">Covid</option>
+                        <option value="weather">Weather</option>
+                        <option value="wildfire">Wildfire</option>
+                        <option value="security">Security</option>
+                    </select>
+                </div>
+                <div id="county-dropdown" class="county-dropdown">
+                    <select name="county" id="county" required onchange="updateCoordinates()">
+                        <option value="1" data-lat="37.6017" data-lng="-121.7195">Alameda</option>
+                        <option value="2" data-lat="34.0522" data-lng="-118.2437">Los Angeles</option>
+                        <option value="3" data-lat="32.7157" data-lng="-117.1611">San Diego</option>
+                        <option value="4" data-lat="37.7749" data-lng="-122.4194">San Francisco</option>
+                        <option value="5" data-lat="37.5630" data-lng="-122.3255">San Mateo</option>
+                        <option value="6" data-lat="37.3541" data-lng="-121.9552">Santa Clara</option>
+                        <option value="7" data-lat="36.6002" data-lng="-121.8947">Monterey</option>
+                        <option value="8" data-lat="38.0690" data-lng="-122.8069">Marin</option>
+                        <option value="9" data-lat="33.7175" data-lng="-117.8311">Orange County</option>
+                        <option value="10" data-lat="38.5816" data-lng="-121.4944">Sacramento</option>
+                    </select>
+                </div>
+                <input id="submit-button" class="submit" type="submit" value="Filter">
+            </form>
+        </div>
+
+        <div id="dashboard-container">
+            <a href="/dashboard"><button id="dashboard-button">Dashboard</button></a>
+            <button id="alert-button" onclick="toggleAlertPanel()"></button>
+        </div>
+        <div id="user-profile-button" onclick="toggleUserProfileMenu()">
+            <span>U</span>
+        </div>
+        <div id="user-profile-dropdown">
+            <a id="login" href="/login">Login</a>
+            <a id="register" href="/register">Register</a>
+            <a id="logout" href="/login/logout">Logout</a>
+            <a href="/profile">Profile</a>
+        </div>
+
+        <div id="alert-panel" class="animated-panel">
+            <h3>Alerts</h3>
+            <!-- <button class="demo-message high-level" onclick="handleAlertClick('High-level Disaster: Evacuation in progress! Take immediate action.')">High-level Disaster: Evacuation in progress! Take immediate action.</button><br>
+            <button class="demo-message medium-level" onclick="handleAlertClick('Medium-level Disaster: Road closure in certain areas due to flooding.')">Medium-level Disaster: Road closure in certain areas due to flooding.</button><br>
+            <button class="demo-message low-level" onclick="handleAlertClick('Low-level Disaster: Weather advisory - Exercise caution during travel.')">Low-level Disaster: Weather advisory - Exercise caution during travel.</button><br>
+            <button class="demo-message medium-level" onclick="handleAlertClick('Medium-level Disaster: Increased security measures in place.')">Medium-level Disaster: Increased security measures in place.</button><br>
+            <button class="demo-message low-level" onclick="handleAlertClick('Low-level Disaster: Minor wildfire reported in the vicinity.')">Low-level Disaster: Minor wildfire reported in the vicinity.</button> -->
+
+            <!-- Container to dynamically add alert messages -->
+            <div id="dynamic-alerts-container">
+
+                <script>
+                    // Function to fetch and display alerts
+                    function fetchAndDisplayAlerts() {
+                        $.get('/alerts', function (data) {
+                            updateDynamicAlertsUI(data);
+                        });
+                    }
+
+                    // Function to update UI with dynamically fetched alerts
+                    function updateDynamicAlertsUI(alerts) {
+                        const dynamicAlertsContainer = $('#dynamic-alerts-container');
+                        dynamicAlertsContainer.empty();
+
+                        if (alerts.length > 0) {
+                            for (const alert of alerts) {
+                                dynamicAlertsContainer.append(`
+                        <div class="alert-popup">
+                            <button class="close-button" onclick="closeAlertPopup(this)">&times;</button>
+                            <button class="demo-message low-level" onclick="handleAlertClick('${alert.alert_message}')">${alert.alert_message}</button><br>
+                        </div>
+                    `);
+                            }
+                        } else {
+                            dynamicAlertsContainer.append('<div>No new alerts</div>');
+
+                        }
+                    }
+
+                    // Fetch and display alerts every 30 seconds (adjust as needed)
+                    setInterval(fetchAndDisplayAlerts, 30000);
+
+                    // Fetch and display alerts immediately when the page loads
+                    fetchAndDisplayAlerts();
+
+                    // Handle alert click (replace with your actual implementation)
+                    function handleAlertClick(message) {
+                        alert(message);
+                    }
+                    // Close the alert popup
+                    function closeAlertPopup(button) {
+                        $(button).parent().remove();
+                    }
+                </script>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <div class="card-container">
+        <div class="container">
+            <div class="heading">
+                <h2>Search Result for </h2>
+                <p id="message"><%= message %> </p>
+                    
+                <% if (flag === 'covid') { %>
+                    
+                    <ul>
+                        <% result.forEach((each) => { %>
+                            <li id="name">Cases per 100k: <%= each.cases_per_100k %> </li>
+                            <li id="search">Diaster: <%= each.deaths_per_100k %></li>
+                            <li id="action">Recommended action: <%= each.recommended_action %></li>
+                            <li id="population">Covid Condition: <%= each.covid_condition %> </li>
+                            <li></li>
+                            <!-- <li id="longitude">County Logitude: <%= each.longitude %> </li>
+                            <li id="latitude">County Latitude: <%= each.latitude %> </li><br><br> -->
+                            <button data-lat="<%= each.latitude %>" data-lng="<%= each.longitude %>" onclick="updateCoordinates('san-jose-card')">Show on Map</button>
+
+                        <% }); %>
+                    </ul>
+                    
+                <% } else if (flag === 'weather') { %>
+                    <ul>
+                        <% result.forEach((each) => { %>
+                            <li id="name">Extreme condition type <%= each.extreme_condition_type %> </li>
+                            <li id="search">Recommended action <%= each.recommended_actions %></li>
+                            <li id="action">Weather condition: <%= each.weather_condition %></li>
+                            <!-- <li id="population">Covid Condition: <%= each.covid_condition %> </li> -->
+                            <li></li>
+                            <!-- <li id="longitude">County Logitude: <%= each.longitude %> </li>
+                            <li id="latitude">County Latitude: <%= each.latitude %> </li><br><br> -->
+                            <button data-lat="<%= each.latitude %>" data-lng="<%= each.longitude %>" onclick="updateCoordinates('')">Show on Map</button>
+
+                        <% }); %>
+                        
+                    </ul>
+                    
+                <% } else if (flag === 'wildfire') { %>
+                    <ul>
+                        <% result.forEach((each) => { %>
+                            <li id="name">incident_description <%= each.incident_description %> </li>
+                            <li id="search">incident_cause <%= each.incident_cause %></li>
+                            <li id="action">Acres: <%= each.acres %></li>
+                            <li id="population">incident_containment <%= each.incident_containment %> </li>
+                            <li id="population">evacuation_status <%= each.evacuation_status %> </li>
+                            <li></li>
+                            <button data-lat="<%= each.latitude %>" data-lng="<%= each.longitude %>" onclick="updateCoordinates('san-jose-card')">Show on Map</button>
+
+                            <!-- <li id="longitude">County Logitude: <%= each.longitude %> </li>
+                            <li id="latitude">County Latitude: <%= each.latitude %> </li><br><br> -->
+                        <% }); %>
+                    </ul>
+          
+                <% } else if (flag === 'security') { %>
+                    <ul>
+                        <% result.forEach((each) => { %>
+                            <li id="name">security_concern_type <%= each.security_concern_type %> </li>
+                            <li id="search">security_action_description <%= each.security_action_description %></li>
+                            <li id="action">incident_status <%= each.incident_status %></li>
+                            <li id="population">crime_cases <%= each.crime_cases %> </li>
+                            <li></li>
+                            <button data-lat="<%= each.latitude %>" data-lng="<%= each.longitude %>" onclick="updateCoordinates('san-jose-card')">Show on Map</button>
+
+                            <!-- <li id="longitude">County Logitude: <%= each.longitude %> </li>
+                            <li id="latitude">County Latitude: <%= each.latitude %> </li><br><br> -->
+                        <% }); %>
+                    </ul>
+                <% } else  { %>
+
+                <% } %>
+            </div> 
+        </div>
+
+    </div>
+
+
+
+    <div id="map"></div>
+    <div id="alert-panel" class="animated-panel">
+        <h3>Alerts</h3>
+        <p>There are no alerts at the moment.</p>
+    </div>
+
+    
+
+    <footer>
+        <p>&copy; CSC648Team1 All rights reserved.</p>
+        <p>Author by <a href="search.html">Team1 member</a></p>
+    </footer>
+</body>
+
+<script>
+    var userIsAdminOrDirector = JSON.stringify(userIsAdminOrDirector);
+
+    var dashboardButton = document.getElementById('dashboard-button');
+    var registerid = document.getElementById('register');
+    var loginid = document.getElementById('login');
+    var countyDropdown = document.getElementById('county-dropdown');
+    var countyCheckboxes = document.getElementById('county-checkboxes');
+    var userIsAdminOrDirector = JSON.stringify(userIsAdminOrDirector);
+
+    var dashboardButton = document.getElementById('dashboard-button');
+    var registerid = document.getElementById('register');
+    var loginid = document.getElementById('login');
+    var countyDropdown = document.getElementById('county-dropdown');
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // Check if it's the index page
+    var isIndexPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+    if (isIndexPage) {
+        var searchResultContainer = document.querySelector('.container');
+        if (searchResultContainer) {
+            searchResultContainer.style.display = 'none';
+        }
+    }
+});
+    // Show or hide the button based on the user's role
+    if (!userIsAdminOrDirector) {
+        dashboardButton.style.display = 'block';
+        registerid.style.display = 'block';
+        loginid.style.display = 'block';
+    } else {
+        dashboardButton.style.display = 'none';
+        registerid.style.display = 'none';
+        loginid.style.display = 'none';
+    }
+
+    function toggleCountyDropdown(event) {
+        event.preventDefault(); // Prevent the default form submission
+        var countyDropdown = document.getElementById('county-dropdown');
+        if (countyDropdown.style.display === 'none') {
+            countyDropdown.style.display = 'block';
+        } else {
+            countyDropdown.style.display = 'none';
+        }
+    }
+
+    var map;
+    var userProfileDropdown = document.getElementById('user-profile-dropdown');
+    var alertPanel = document.getElementById('alert-panel');
+
+    function initMap() {
+        var californiaBounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(32.532147, -124.410798), // Southwest corner of California
+            new google.maps.LatLng(42.009518, -114.131211)  // Northeast corner of California
+        );
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: californiaBounds.getCenter(),
+            zoom: 7,
+            disableDefaultUI: true
+        });
+
+        // Restrict the map to only show California
+        map.fitBounds(californiaBounds);
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                // If the user's location is outside California, set it to California's center
+                if (!californiaBounds.contains(userLocation)) {
+                    userLocation = californiaBounds.getCenter();
+                }
+
+                // Update the map's center to the user's location
+                map.setCenter(userLocation);
+
+                // Add a marker for the user's location
+             
+
+                var infoWindow = new google.maps.InfoWindow({
+                    content: 'Your Location'
+                });
+
+                gpsMarker.addListener('click', function () {
+                    infoWindow.open(map, gpsMarker);
+                });
+            });
+        }
+
+        // Prevent the map from being panned outside California
+        google.maps.event.addListener(map, 'drag', function () {
+            if (!californiaBounds.contains(map.getCenter())) {
+                map.panTo(californiaBounds.getCenter());
+            }
+        });
+    }
+
+    function searchLocation() {
+        var location = document.getElementById('search-input').value;
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({ address: location }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+            } else {
+                alert('Location not found');
+            }
+        });
+    }
+
+    function toggleUserProfileMenu() {
+        if (userProfileDropdown.style.display === 'block') {
+            userProfileDropdown.style.display = 'none';
+        } else {
+            userProfileDropdown.style.display = 'block';
+        }
+    }
+
+    function toggleAlertPanel() {
+        if (alertPanel.style.display === 'block') {
+            alertPanel.style.transform = 'scaleY(0)';
+            alertPanel.style.opacity = '0';
+            setTimeout(function () {
+                alertPanel.style.display = 'none';
+            }, 300);
+        } else {
+            alertPanel.style.display = 'block';
+            alertPanel.style.transform = 'scaleY(1)';
+            alertPanel.style.opacity = '1';
+        }
+    }
+
+
+    function addMarker(latitude, longitude, title) {
+        var marker = new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            title: title
+        });
+    }
+
+
+
+
+
+
+
+  
+    function handleAlertClick(message) {
+        // Customize this function based on your requirements
+        alert('Clicked: ' + message);
+
+    }
+   
+    function updateCoordinates() {
+    var countyDropdown = document.getElementById('county');
+    var selectedOption = countyDropdown.options[countyDropdown.selectedIndex];
+    var lat = parseFloat(selectedOption.getAttribute('data-lat'));
+    var lng = parseFloat(selectedOption.getAttribute('data-lng'));
+    
+    // Call the addMarker function with the cardId parameter
+    addMarker(lat, lng, 'Selected Location', 'selected-card');
+}
+
+function addMarker(latitude, longitude, title, cardId) {
+        // Create a marker for the selected location
+        var marker = new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            title: title
+        });
+
+        // Center the map on the marker
+        map.setCenter({ lat: latitude, lng: longitude });
+
+        // Zoom in on the marker
+        var zoomLevel = 10; // Adjust this value as needed
+        map.setZoom(zoomLevel);
+
+        // Create an info window for the marker
+        var infoWindow = new google.maps.InfoWindow({
+            content: document.getElementById(cardId).innerHTML
+        });
+
+        // Open the info window when the marker is clicked
+        marker.addListener('click', function () {
+            infoWindow.open(map, marker);
+        });
+    }
+    // function showCardOnMap(lat, lng) {
+    //     // Retrieve the map element
+    //     var map = new google.maps.Map(document.getElementById('map'), {
+    //         center: { lat: lat, lng: lng },
+    //         zoom: 10,
+    //         disableDefaultUI: true
+    //     });
+
+    //     // Add a marker for the selected location
+    //     var marker = new google.maps.Marker({
+    //         position: { lat: lat, lng: lng },
+    //         map: map,
+    //         title: 'Selected Location'
+    //     });
+    // }
+
+
+      
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvv3xaVO735oOOAtxNOemAreJQTkGyxdw&callback=initMap"></script>
+</body>
+</html>

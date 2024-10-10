@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Report Form</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 60%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #2e2e2e;
+            margin-bottom: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #e4e4e4;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="../icon/logo.png" class="logo" alt="Logo">
+        </div>
+        <h2>Weather Condition Report</h2>
+        <form action="/weather" method="post">
+            <div class="form-group">
+
+                <label for="weather_condition">Weather Type:</label>
+                <select id="weather_condition" name="weather_condition" required>
+
+                    <option value="rainy">Rainy</option>
+                    <option value="stormy">Stormy</option>
+                    <option value="snowy">Snowy</option>
+                    <option value="foggy">Sunny</option>
+                </select>
+            </div>
+            <div class="form-group">
+
+                <label name="extreme_condition_type"></label>ather  weather Condition:</label>
+                <select id="extreme_condition_type" name="extreme_condition_type"required>
+                    <option value="1">Mild Condition</option>
+                    <option value="2">Medium Condition</option>
+                    <option value="3">High Conditions</option>
+
+                </select>
+            </div>
+            
+            
+            <div class="form-group">
+
+                <label for="fk_weather_county_id">County:</label>
+                <select id="fk_weather_county_id" name="fk_weather_county_id" required>
+                    <option value="1">Alameda</option>
+                    <option value="2">Los Angeles</option>
+                    <option value="3">San Diego</option>
+                    <option value="4">San Francisco</option>
+                    <option value="5">San Mateo</option>
+                    <option value="6">Santa Clara</option>
+                    <option value="7">Montrey</option>
+                    <option value="8">Marin</option>
+                    <option value="9">Orange county</option>
+                    <option value="10">Sacramento</option>
+                    
+            </div>
+            
+            
+            <div class="form-group">
+
+                <label for="recommended_actions">recommended_actions:</label>
+                <textarea id="recommended_actions" name="recommended_actions" rows="4" minlength="4"></textarea>
+            </div>
+            <input type="submit" value="Submit" class="submit">
+        </form>
+    </div>
+</body>
+
+</html>

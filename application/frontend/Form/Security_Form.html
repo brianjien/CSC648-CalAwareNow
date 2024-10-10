@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Report Form</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 60%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #2e2e2e;
+            margin-bottom: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #e4e4e4;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="../icon/logo.png" class="logo" alt="Logo">
+        </div>
+        <h2>Security Condition Report</h2>
+        <form action="/security_form" method="post">
+
+            <div class="form-group">
+                <label for="security_concern_type">Security concern:</label>
+                <textarea id="security_concern_type" name="security_concern_type" rows="1" minlength="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="incident_status">Incident Status:</label>
+                <select id="incident_status" name="incident_status" required>
+                    <option value="1">Low Risk(Area is clear)</option>
+                    <option value="2">Moderate Risk(Exercise caution)</option>
+                    <option value="3">High Risk(Immediate action required)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fk_security_county_id">County:</label>
+                <select id="fk_security_county_id" name="fk_security_county_id" required>
+                    <option value="1">Alameda</option>
+                    <option value="2">Los Angeles</option>
+                    <option value="3">San Diego</option>
+                    <option value="4">San Francisco</option>
+                    <option value="5">San Mateo</option>
+                    <option value="6">Santa Clara</option>
+                    <option value="7">Montrey</option>
+                    <option value="8">Marin</option>
+                    <option value="9">Orange county</option>
+                    <option value="10">Sacramento</option>
+                </select>
+            </div>
+          
+            
+            <div class="form-group">
+                <label for="security_action_description">Recommended Actions:</label>
+                <textarea id="security_action_description" name="security_action_description" rows="4" minlength="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="crime_cases">Crime Cases in County:</label>
+                <input type="number" id="crime_cases" name="crime_cases" required>
+            </div>
+
+            <input type="hidden" name="submit_timestamp" id="submit_timestamp" value="">
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  const form = document.querySelector("form");
+                  const submitTimestampInput = document.getElementById("submit_timestamp");
+              
+                  form.addEventListener("submit", function () {
+                    const currentTimestamp = new Date().toISOString();
+                    submitTimestampInput.value = currentTimestamp;
+                  });
+                });
+              </script>
+
+            <input type="submit" value="Submit" class="submit">
+        </form>
+    </div>
+</body>
+
+</html>

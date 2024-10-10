@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fasika</title>
+
+    <style>
+        body{
+            margin: 5% 20%;
+            background-color: rgb(252, 249, 215);
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        
+        #profile_img {
+            width: 480px;
+            height: 575px; 
+            border-radius: 50%; 
+        }
+        .sec_1{
+            display: grid;
+            align-items: center;
+            grid-template-areas: 
+            ". header header header header header"
+            ". image image about_me about_me . ";
+            grid-gap: 10px;
+        }
+        .header-sec{
+            grid-area: header;
+            justify-items: center;
+            
+        }
+        .image_sec{
+            grid-area: image;
+        }
+
+        .about_me_sec{
+            grid-area: about_me;
+        }
+        p{
+            font-size: larger;
+        }
+        #home_button{
+            border: none;
+            background-color: rgb(142, 76, 52);
+            padding: 15px 30px;
+            font-size: larger;
+        }
+        #home_button a{
+            text-decoration: none;
+            color: rgb(252, 249, 215);
+        }
+
+        @media only screen and (max-width: 1200px) {
+            .sec_1{
+                display: grid;
+                align-items: center;
+                grid-template-areas: 
+                "header"
+                "image"
+                "about_me";
+                grid-gap: 10px;
+            }
+            #profile_img {
+                width: 280px;
+                height: 375px; 
+                border-radius: 30%; 
+            }
+        }
+    </style>
+</head>
+<body>   
+    <div class="sec_1">
+        <div class="header-sec">
+            <!-- <h1>About Me</h1>  -->
+        </div>
+        <div class = "image_sec">
+            <img id = "profile_img" src="../images/fasika.jpeg" alt="Picture of Fasika"  >
+        </div>
+        <div class = "about_me_sec">
+            <h1>About Me</h1> 
+            <p>Fasika Abera</p>
+            <p>A Junior Computer Science Student at SFSU</p>
+            <button id="home_button"><a href="../index.html">Home</a></button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Add any additional styles or links to external stylesheets here -->
+
+    <script src="/application/backend/routes/Profile.js"></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: lightgray;
+            margin: 0;
+            padding: 0;
+        }
+
+        #banner {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: right;
+        }
+
+        #content {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        #alert-preferences {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        img {
+            width: 150px;
+            height: 150px;
+            border-radius: 60%;
+        }
+        
+        #edit-profile-btn{
+            margin-top: 50px;
+        }
+
+        .feedback-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .feedback-button:hover {
+        background-color: #45a049;
+    }
+
+    #feedback-chat-panel {
+        display: none;
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 3;
+        transform: scale(0);
+        transition: transform 0.3s;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    #chat-messages {
+        max-height: 100px;
+        overflow-y: auto;
+    }
+
+    #admin-feedback-message {
+        width: calc(100% - 20px);
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+    }
+       
+    </style>
+</head>
+<body>
+    <div id="banner">
+        <div id="user-profile-button">Profile</div>
+        <!-- Add the user profile dropdown menu and its contents here -->
+    </div>
+
+    <div id="content">
+        <h2>User Profile</h2>
+        
+        <form id="profile-form">
+
+            <div>
+                <img src="/images/Admin.png" alt="user image">
+            </div>
+
+            <label for="username">UserType: </label>
+            <input type="text" id="userType" name="userType" required disabled value="<%= userData.userType %>">
+
+            <label for="username">Username: </label>
+            <input type="text" id="username" name="username" required disabled value="<%= userData.username %>">
+
+            <label for="name">Name: </label>
+            <input type="text" id="name" name="name" required disabled value="<%= userData.name %>">
+
+            <label for="contact">Contact Information:</label>
+            <input type="text" id="contact" name="contact" required disabled value="<%= userData.contact %>">
+
+            <button type="button" id="save-profile-btn" style="display: none;" onclick="saveProfile()">Save Profile</button>
+        </form>
+        
+        
+        <button type="button" id="edit-profile-btn" onclick="enableEditing()">Edit Profile</button>
+        <button id="feedback-button" onclick="toggleFeedbackChatPanel()" class="feedback-button">Send Feedback</button>
+
+        <div id="feedback-chat-panel" class="message-form">
+            <h3>Send Feedback </h3>
+            <div id="chat-messages" class="chat-messages"></div>
+            <form id="admin-feedback-form" action="/feedback/send" method="post">
+                <input type="text" id="admin-feedback-message" name="feedback" placeholder="Type your feedback">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <!-- <button type="submit" class="btn btn-primary" onclick="submitFeedbackToAdmin()">Send</button> -->
+            </form>
+        </div>
+
+    
+        <div id="feedback-popup" class="message-popup"></div>
+    </div>
+</body>
+    <script>
+        function enableEditing() {
+            document.getElementById('username').removeAttribute('disabled');
+            document.getElementById('contact').removeAttribute('disabled');
+            document.getElementById('save-profile-btn').style.display = 'block';
+        }
+
+        function saveProfile() {
+        const updatedUsername = document.getElementById('username').value;
+        const updatedContact = document.getElementById('contact').value;
+
+        // Make an AJAX request to update user info
+        fetch('/profile/update-profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: updatedUsername, contact: updatedContact }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok (Status: ${response.status})`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the response, e.g., show a success message
+            console.log(data);
+
+            // Disable username and contact inputs and hide the "Save Profile" button
+            document.getElementById('username').disabled = true;
+            document.getElementById('contact').disabled = true;
+            document.getElementById('save-profile-btn').style.display = 'none';
+            
+            alert('User profile updated successfully');
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error.message);
+            alert('Error updating user data in the database');
+        });
+    }
+
+    function toggleFeedbackChatPanel() {
+        var feedbackChatPanel = document.getElementById('feedback-chat-panel');
+        if (feedbackChatPanel.style.display === 'none') {
+            feedbackChatPanel.style.display = 'block';
+            feedbackChatPanel.style.transform = 'scale(1)';
+        } else {
+            feedbackChatPanel.style.transform = 'scale(0)';
+            setTimeout(function () {
+                feedbackChatPanel.style.display = 'none';
+            }, 300);
+        }
+    }
+    function submitFeedbackToAdmin() {
+        var chatMessages = document.getElementById('chat-messages');
+        var feedbackMessage = document.getElementById('admin-feedback-message').value;
+
+        if (feedbackMessage.trim() !== '') {
+            var messageElement = document.createElement('div');
+            messageElement.className = 'user-message';
+            messageElement.textContent = 'User: ' + feedbackMessage;
+
+            chatMessages.appendChild(messageElement);
+
+            // Clear the input field after submitting
+            document.getElementById('admin-feedback-message').value = '';
+        }
+    }
+
+    function showFeedbackPopup() {
+        var feedbackPopup = document.getElementById('feedback-popup');
+        feedbackPopup.innerHTML = 'Feedback submitted!';
+        feedbackPopup.classList.add('show');
+        setTimeout(function () {
+            feedbackPopup.classList.remove('show');
+        }, 3000);
+    }
+    function updateChatPanel() {
+        var chatMessages = document.getElementById('chat-messages');
+        var feedbackMessage = document.getElementById('admin-feedback-message').value;
+        chatMessages.innerHTML = feedbackMessage;
+    }
+    </script>
+
+</body>
+</html>
