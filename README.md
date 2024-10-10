@@ -13,7 +13,7 @@ ensures even those not tech-savvy can navigate with ease.
 advanced mapping interfaces and media-rich content, CalAwareNow ensure stands out.
 3. Safety alerts: It will show the safest neighborhoods concept for the security
 aspect.
-About Our Team:
+# About Our Team:
 CalAwareNow is being developed by a dynamic team of students from San Francisco State
 University, bringing together diverse skills and experiences. It is a blend of passionate
 innovators who believe in the power of technology to effect positive change. Leveraging diverse
